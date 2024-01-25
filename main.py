@@ -2,6 +2,7 @@ import numpy as np
 
 from layer_dense import LayerDense
 from activation_relu import ActivationReLU
+from activation_softmax import ActivationSoftmax
 
 
 def spiral_data(points: int, classes: int):
@@ -43,6 +44,24 @@ def activation_relu_example():
     print(activation.output)
 
 
+def activation_soft_max_example():
+    X, y = spiral_data(points=100, classes=3)
+
+    layer1 = LayerDense(2, 3)
+    activation = ActivationReLU()
+
+    layer2 = LayerDense(3, 3)
+    activation2 = ActivationSoftmax()
+
+    layer1.forward(X)
+    activation.forward(layer1.output)
+
+    layer2.forward(layer1.output)
+    activation2.forward(layer2.output)
+    print(activation2.output)
+
+
 if __name__ == '__main__':
     layer_dense_example()
     activation_relu_example()
+    activation_soft_max_example()
