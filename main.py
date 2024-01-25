@@ -48,15 +48,15 @@ def activation_soft_max_example():
     X, y = spiral_data(points=100, classes=3)
 
     layer1 = LayerDense(2, 3)
-    activation = ActivationReLU()
+    activation1 = ActivationReLU()
 
     layer2 = LayerDense(3, 3)
     activation2 = ActivationSoftmax()
 
     layer1.forward(X)
-    activation.forward(layer1.output)
+    activation1.forward(layer1.output)
 
-    layer2.forward(layer1.output)
+    layer2.forward(activation1.output)
     activation2.forward(layer2.output)
     print(activation2.output)
 
