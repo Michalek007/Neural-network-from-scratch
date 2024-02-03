@@ -1,32 +1,20 @@
 import numpy as np
 
-from layer_dense import LayerDense
-from activation_relu import ActivationReLU
-from activation_softmax import ActivationSoftmax
+from layer import Layer
+from activation import ActivationReLU, ActivationSoftmax
 from loss import LossCategoricalCrossEntropy
+from utils import spiral_data
 
 
-def spiral_data(points: int, classes: int):
-    X = np.zeros((points*classes, 2))
-    y = np.zeros(points*classes, dtype='uint8')
-    for class_number in range(classes):
-        ix = range(points*class_number, points*(class_number+1))
-        r = np.linspace(0.0, 1, points)  # radius
-        t = np.linspace(class_number*4, (class_number+1)*4, points) + np.random.randn(points)*0.2
-        X[ix] = np.c_[r*np.sin(t*2.5), r*np.cos(t*2.5)]
-        y[ix] = class_number
-    return X, y
-
-
-def layer_dense_example():
+def layer_example():
     X = [
         [1, 2, 3, 2.5],
         [2.0, 5.0, -1.0, 2.0],
         [-1.5, 2.7, 3.3, -0.8]
     ]
 
-    layer1 = LayerDense(4, 5)
-    layer2 = LayerDense(5, 2)
+    layer1 = Layer(4, 5)
+    layer2 = Layer(5, 2)
 
     layer1.forward(X)
     layer2.forward(layer1.output)
@@ -37,7 +25,7 @@ def layer_dense_example():
 def activation_relu_example():
     X, y = spiral_data(points=100, classes=3)
 
-    layer1 = LayerDense(2, 5)
+    layer1 = Layer(2, 5)
     activation = ActivationReLU()
 
     layer1.forward(X)
@@ -48,10 +36,10 @@ def activation_relu_example():
 def activation_soft_max_example():
     X, y = spiral_data(points=100, classes=3)
 
-    layer1 = LayerDense(2, 3)
+    layer1 = Layer(2, 3)
     activation1 = ActivationReLU()
 
-    layer2 = LayerDense(3, 3)
+    layer2 = Layer(3, 3)
     activation2 = ActivationSoftmax()
 
     layer1.forward(X)
@@ -62,29 +50,65 @@ def activation_soft_max_example():
     print(activation2.output)
 
 
-def neural_network_example():
+def backward_propagation_example():
     X, y = spiral_data(points=100, classes=3)
 
-    layer1 = LayerDense(2, 3)
-    activation1 = ActivationReLU()
+    layer1 = Layer(2, 3)  # layer 1 2->3
+    activation1 = ActivationReLU()  # activation 1 RELU
+    layer2 = Layer(3, 3)   # layer 2 3->3
+    activation2 = ActivationSoftmax()  # activation 2 SOFTMAX
+    loss_function = LossCategoricalCrossEntropy()  # loss function CATEGORICAL ENTROPY
 
-    layer2 = LayerDense(3, 3)
-    activation2 = ActivationSoftmax()
+    input_data = np.array([X[1]])
+    y_pred = None
+    y_true = np.array([1, 0, 0])
 
-    loss_function = LossCategoricalCrossEntropy()
-
-    layer1.forward(X)
+    # forward propagation
+    print('Starting forward propagation...')
+    layer1.forward(input_data)
     activation1.forward(layer1.output)
 
     layer2.forward(activation1.output)
     activation2.forward(layer2.output)
 
-    loss = loss_function.calculate(activation2.output, y)
-    print(loss)
+    y_pred = activation2.output
+    print('Calculated output: ')
+    print(y_pred)
+    print('Wanted output: ')
+    print(y_true)
+
+    # loss_function.forward(calculated_output_data, wanted_output_data)
+    loss_function.forward(y_pred, y_true)
+    print("Loss: ")
+    print(loss_function.calculate())
+
+    print('\n_______________________\n')
+
+    # backward propagation
+    print('Starting backward propagation...')
+    loss_function.backward()
+    print('Loss function input error: ')
+    print(loss_function.input_error)
+
+    activation2.backward(loss_function.input_error)
+    print('Activation 2 softmax input_error:')
+    print(activation2.input_error)
+
+    layer2.backward(activation2.input_error, 0.1)
+    print('Layer2 input_error: ')
+    print(layer2.input_error)
+
+    activation1.backward(layer2.input_error)
+    print('Activation1 input_error: ')
+    print(activation1.input_error)
+
+    layer1.backward(activation1.input_error, 0.1)
+    print('Layer1 input_error: ')
+    print(layer1.input_error)
 
 
 if __name__ == '__main__':
-    # layer_dense_example()
+    # layer_example()
     # activation_relu_example()
     # activation_soft_max_example()
-    neural_network_example()
+    backward_propagation_example()
