@@ -4,7 +4,10 @@ from .loss_base import Loss
 
 
 class LossCategoricalCrossEntropy(Loss):
-    """ Categorical Cross Entropy -> L = sum( y_true * ln(y_pred) ) """
+    """ Categorical Cross Entropy -> L = sum( y_true * ln(y_pred) )
+
+        Derivative -> L' = y_pred - y_true
+    """
 
     def forward(self, y_pred, y_true):
         self.y_pred = y_pred
@@ -24,5 +27,4 @@ class LossCategoricalCrossEntropy(Loss):
         self.output = negative_log_likelihoods
 
     def backward(self):
-        """ y_pred -> calculated output of nn (input), y_true -> wanted output """
         self.input_error = self.y_pred - self.y_true

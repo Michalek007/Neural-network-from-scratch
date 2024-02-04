@@ -1,4 +1,3 @@
-import numpy as np
 
 
 class NeuralNetwork:
@@ -18,7 +17,7 @@ class NeuralNetwork:
         # run network over all samples
         for i in range(samples):
             # forward propagation
-            inputs = np.array([input_data[i]])
+            inputs = input_data[i]
             for layer in self.layers:
                 layer.forward(inputs)
                 inputs = layer.output
@@ -33,15 +32,15 @@ class NeuralNetwork:
         err = 0
         for i in range(epochs):
             for j in range(samples):
-                inputs = np.array([x_train[j]])
+                inputs = x_train[j]
 
                 # forward propagation
                 for layer in self.layers:
                     layer.forward(inputs)
                     inputs = layer.output
 
-                print(self.layers[-1].output)
-                self.loss_function.forward(self.layers[-1].output, np.array([y_train[j]]))
+                # print(self.layers[-1].output)
+                self.loss_function.forward(self.layers[-1].output, y_train[j])
                 err += self.loss_function.calculate()
 
                 # backward propagation

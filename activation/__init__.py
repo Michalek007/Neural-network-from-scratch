@@ -3,3 +3,4 @@
 """
 from .activation_relu import ActivationReLU
 from .activation_softmax import ActivationSoftmax
+from .activation_tanh import ActivationTanh

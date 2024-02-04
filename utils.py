@@ -22,7 +22,7 @@ def spiral_data(points: int, classes: int):
 def one_hot_encoder(input_array):
     """ Encodes input array in one hot encoding.
         Args:
-            input_array: array which consist integers from domain 0 to N
+            input_array: array which consist integers from domain n: <0, N> and n is natural number
         Returns:
             One hot encoded array.
     """
@@ -33,11 +33,5 @@ def one_hot_encoder(input_array):
         i_array = [0 for _ in range(N)]
         i_array[input_array[i]] = 1
         output_array.append(i_array)
-        # if input_array[i] == 0:
-        #     output_array.append([1, 0, 0])
-        # if input_array[i] == 1:
-        #     output_array.append([0, 1, 0])
-        # if input_array[i] == 2:
-        #     output_array.append([0, 0, 1])
     return output_array
 

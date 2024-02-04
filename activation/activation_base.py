@@ -18,5 +18,5 @@ class Activation(ABC):
         pass
 
     @abstractmethod
-    def backward(self, output_error, learning_rate):
+    def backward(self, output_error, learning_rate=None):
         pass
