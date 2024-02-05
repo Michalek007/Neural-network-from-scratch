@@ -1,9 +1,9 @@
 import numpy as np
 import json
 
-from .layer import Layer
-from .activation import ActivationSoftmax, ActivationReLU, ActivationTanh
-from .loss import LossCategoricalCrossEntropy, LossMSE
+from neural_network.layer import Layer
+from neural_network.activation import ActivationSoftmax, ActivationReLU, ActivationTanh
+from neural_network.loss import LossCategoricalCrossEntropy, LossMSE
 
 
 class NeuralNetwork:

@@ -40,12 +40,13 @@ class SeedGroup(BaseGroup):
         print('Database seeded!')
 
     def digit_images(self):
-        image1 = DigitImages(path='C:\\Users\\Public\\Projects\\MachineLearning\\NeuralNetwork\\archive\\trainingSample\\img_0.jpg', digit=0)
-        image2 = DigitImages(path='C:\\Users\\Public\\Projects\\MachineLearning\\NeuralNetwork\\archive\\trainingSample\\img_1.jpg', digit=1)
-        image3 = DigitImages(path='C:\\Users\\Public\\Projects\\MachineLearning\\NeuralNetwork\\archive\\trainingSample\\img_2.jpg', digit=0)
+        for directory, dirs, files in os.walk(
+                'C:\\Users\\Public\\Projects\\MachineLearning\\NeuralNetwork\\archive\\trainingSet\\trainingSet\\'):
+            if files:
+                digit = int(directory.split('\\')[-1])
+                for file in files:
+                    image = DigitImages(path=directory + '\\' + file, digit=digit)
+                    self.db.session.add(image)
 
-        self.db.session.add(image1)
-        self.db.session.add(image2)
-        self.db.session.add(image3)
         self.db.session.commit()
         print('Database seeded!')

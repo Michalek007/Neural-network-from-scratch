@@ -1,12 +1,14 @@
+from io import BytesIO
+
 from flask import request, url_for, redirect, render_template, jsonify, current_app
 import matplotlib.pyplot as plt
-from PIL import UnidentifiedImageError
+from PIL import UnidentifiedImageError, Image
+import base64
 import numpy as np
 
 from app.blueprints import BlueprintSingleton
 from database.schemas import digit_images_schema, digit_images_many_schema, DigitImages
 from neural_network import NeuralNetwork
-from neural_network.utils import one_hot_encoder
 
 
 class NeuralNetworkBp(BlueprintSingleton):
@@ -44,6 +46,9 @@ class NeuralNetworkBp(BlueprintSingleton):
 
         predicted_class = np.argmax(out)
         probability = np.max(out)
+
+        # with open(current_app.config.get('UPLOAD_DIRECTORY') + 'digit.jpg', 'rb') as f:
+        #     image_data = base64.b64encode(f.read())
 
         result = {'class': predicted_class, 'probs': probability, 'image': None}
         return render_template('nn/result.html', result=result)
