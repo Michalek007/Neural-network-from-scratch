@@ -4,9 +4,20 @@ np.random.seed(0)
 
 
 class Layer:
-    def __init__(self, n_inputs: int, n_neurons: int):
-        self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
-        self.biases = np.zeros((1, n_neurons))
+    def __init__(self, n_inputs: int, n_neurons: int, from_dict: dict = None):
+
+        if from_dict:
+            self.weights = np.array(
+                from_dict.get('weights')
+            )
+            self.biases = np.array(
+                from_dict.get('biases')
+            )
+
+        else:
+            self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
+            self.biases = np.zeros((1, n_neurons))
+
         self.output = None
         self.input = None
         self.input_error = None
