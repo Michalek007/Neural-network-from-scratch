@@ -1,9 +1,12 @@
 from flask import request, url_for, redirect, render_template, jsonify, current_app
 import matplotlib.pyplot as plt
+from PIL import UnidentifiedImageError
+import numpy as np
 
 from app.blueprints import BlueprintSingleton
 from database.schemas import digit_images_schema, digit_images_many_schema, DigitImages
-from utils import DateUtil
+from neural_network import NeuralNetwork
+from neural_network.utils import one_hot_encoder
 
 
 class NeuralNetworkBp(BlueprintSingleton):
@@ -25,7 +28,24 @@ class NeuralNetworkBp(BlueprintSingleton):
         return redirect(url_for('nn.result'))
 
     def result(self):
-        result = {'class': 1, 'probs': None, 'image': None}
+        network = NeuralNetwork(current_app.config.get('BASEDIR') + '\\neural_network\\models\\mnist_model.json')
+
+        try:
+            x_test = plt.imread(current_app.config.get('UPLOAD_DIRECTORY') + 'digit.jpg')
+        except UnidentifiedImageError:
+            return jsonify(message='Incorrect file format. Expected: .jpg'), 408
+
+        x_test = x_test.reshape(28 * 28)
+        x_test = x_test.astype('float32')
+        x_test /= 255
+        x_test = np.array([x_test])
+
+        out = network.predict(x_test)
+
+        predicted_class = np.argmax(out)
+        probability = np.max(out)
+
+        result = {'class': predicted_class, 'probs': probability, 'image': None}
         return render_template('nn/result.html', result=result)
 
     # gui views
@@ -33,4 +53,4 @@ class NeuralNetworkBp(BlueprintSingleton):
         return render_template('nn/predict.html')
 
     def digit_images_table(self):
-        return render_template("nn/digit_images_table.html")
+        return render_template('nn/digit_images_table.html')

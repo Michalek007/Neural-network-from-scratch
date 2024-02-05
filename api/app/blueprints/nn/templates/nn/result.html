@@ -1,9 +1,12 @@
 {% extends "table_base.html" %}
 
 {% block body %}
-
+    <h1> Result </h1>
     <div class="white_text">
-    {{ result.get('class') }}
+        <p> Predicted digit: </p>
+        <p> {{ result.get('class') }} </p>
+        <p> Probability: </p>
+        <p> {{ result.get('probs') }} </p>
     </div>
 {#    <figure class="figure">#}
 {#        <img src="data:image/png;base64, {{result.get("image")}}" class="figure-img img-thumbnail input-image">#}

@@ -7,3 +7,4 @@ __pycache__/
 database/db/data.db
 /app/upload/
 /archive/
+/neural_network/models/
