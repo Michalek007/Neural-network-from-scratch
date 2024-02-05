@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block body %}
+     <script>
+     $(document).ready(function () {
+
+         // Add the following code if you want the name of the file appear on select
+         $(".custom-file-input").change(function () {
+             var fileName = $(this).val().split("\\").pop();
+             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+         });
+
+         $('#upload-file').submit(function (event) {
+             if (document.getElementById("customFile").files.length == 0) {
+                 event.preventDefault();
+                 alert("Please select a file before submit");
+             }
+         });
+
+         $('#submit-url').submit(function (event) {
+             //alert("Please enter image URL before submit");
+             if (document.getElementById("url-input").value == "") {
+                 event.preventDefault();
+                 alert("Please enter image URL before submit");
+             }
+         });
+     });
+    </script>
+
+    <h1> Predict </h1>
+     <form action="{{url_for('nn.upload_digit_image')}}" id="upload-file" method="post" enctype="multipart/form-data">
+        <p class="white_text">Select digit image to upload and press detect button (images should in format 28x28 pixels):</p>
+        <div class="white_text">
+            <input type="file" class="white_text" name="file" id="customFile">
+        </div>
+
+        <div class="white_text">
+            <input type="submit" class="button" id="btn-predict" value="Detect" />
+        </div>
+    </form>
+{% endblock %}
