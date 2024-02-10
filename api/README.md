@@ -1,6 +1,9 @@
 # Neural network api
 
+Flask application which demonstrates neural_package usage.
+
 It contains:
+* trained neural network model for MNIST dataset 
 * user authentication with flask-login
 * database created using SQLAlchemy
 * CRUD for computer performance (params)
@@ -55,6 +58,7 @@ To install new package run:
     
 Rest-api is dived into subdirectories which contains:
 * **app** - Flask app, blueprints and api methods
+* **neural_network** - neural network package, contains trained model for MNIST dataset
 * **cli** - cli commands and groups
 * **database** - SQLAlchemy database, schemas and data.db 
 * **scheduler** - APScheduler, tasks and related methods
