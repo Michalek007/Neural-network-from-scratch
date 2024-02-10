@@ -13,6 +13,7 @@ class DetailsBp(BlueprintSingleton):
         from app.blueprints.user.views import register, logout, protected, users
         from app.blueprints.details.views import app_details
         from app.blueprints.params.views import performance, params, add_params, delete_params, update_params
+        from app.blueprints.nn.views import upload_digit_image, digit_images, result
         return [
             login,
             logout,
@@ -24,7 +25,10 @@ class DetailsBp(BlueprintSingleton):
             params,
             add_params,
             delete_params,
-            update_params
+            update_params,
+            upload_digit_image,
+            digit_images,
+            result
         ]
 
     # private methods

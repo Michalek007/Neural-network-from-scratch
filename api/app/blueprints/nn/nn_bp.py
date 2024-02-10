@@ -1,9 +1,6 @@
-from io import BytesIO
-
 from flask import request, url_for, redirect, render_template, jsonify, current_app
 import matplotlib.pyplot as plt
 from PIL import UnidentifiedImageError, Image
-import base64
 import numpy as np
 
 from app.blueprints import BlueprintSingleton
@@ -16,7 +13,15 @@ class NeuralNetworkBp(BlueprintSingleton):
 
     def digit_images(self, digit_image_id: int = None):
         if not digit_image_id:
-            d_images = DigitImages.query.all()
+            page_number = request.args.get('page')
+            if page_number is None:
+                d_images = DigitImages.query.paginate().items
+            else:
+                try:
+                    page_number = int(page_number)
+                except TypeError:
+                    return jsonify(message='Page number must be integer. '), 408
+                d_images = DigitImages.query.paginate(page=page_number).items
             return jsonify(digit_images=digit_images_many_schema.dump(d_images))
         d_image = DigitImages.query.filter_by(id=digit_image_id).first()
         if d_image:
@@ -37,10 +42,13 @@ class NeuralNetworkBp(BlueprintSingleton):
         except UnidentifiedImageError:
             return jsonify(message='Incorrect file format. Expected: .jpg'), 408
 
-        x_test = x_test.reshape(28 * 28)
-        x_test = x_test.astype('float32')
-        x_test /= 255
-        x_test = np.array([x_test])
+        try:
+            x_test = x_test.reshape(28 * 28)
+            x_test = x_test.astype('float32')
+            x_test /= 255
+            x_test = np.array([x_test])
+        except ValueError:
+            return jsonify(message='Incorrect size of image. Expected 28x28 pixels. ')
 
         out = network.predict(x_test)
 
