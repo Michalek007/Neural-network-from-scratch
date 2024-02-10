@@ -2,8 +2,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 
-from network import NeuralNetwork
-from layer import Layer
+from core import NeuralNetwork, Layer
 from loss import LossCategoricalCrossEntropy, LossMSE
 from activation import ActivationSoftmax, ActivationReLU, ActivationTanh
 from nn_utils import one_hot_encoder

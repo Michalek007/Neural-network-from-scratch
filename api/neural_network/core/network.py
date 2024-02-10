@@ -1,7 +1,7 @@
 import numpy as np
 import json
 
-from neural_network.layer import Layer
+from neural_network.core.layer import Layer
 from neural_network.activation import ActivationSoftmax, ActivationReLU, ActivationTanh
 from neural_network.loss import LossCategoricalCrossEntropy, LossMSE
 from neural_network.loss.loss_base import Loss
