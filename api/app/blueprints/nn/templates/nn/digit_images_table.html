@@ -1,0 +1,31 @@
+{% extends "table_base.html" %}
+
+            {% block title %}
+                Digit images
+            {% endblock %}
+            {%  block table_heading %}
+                        <th onclick="sortTable(0)">ID</th>
+                        <th onclick="sortTable(1)">PATH</th>
+                        <th onclick="sortTable(2)">DIGIT</th>
+            {% endblock %}
+
+            {% block url %}
+                '{{ url_for('nn.digit_images') }}'
+            {% endblock %}
+            {% block for_each %}
+                data = data.digit_images
+                data.forEach(item => {
+                        const row = tableBody.insertRow();
+                        const cell1 = row.insertCell(0);
+                        const cell2 = row.insertCell(1);
+                        const cell3 = row.insertCell(2);
+
+                        cell1.textContent = item.id;
+                        cell2.textContent = item.path;
+                        cell3.textContent = item.digit;
+                });
+            {% endblock %}
+
+{% block body %}
+    {{ super() }}
+{% endblock %}

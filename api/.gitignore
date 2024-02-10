@@ -4,6 +4,7 @@ __pycache__/
 /.venv/
 /.pytest_cache/
 /.idea/
+database/db/data.db
+/app/upload/
 /archive/
-/models/
-/examples/
+/neural_network/models/
